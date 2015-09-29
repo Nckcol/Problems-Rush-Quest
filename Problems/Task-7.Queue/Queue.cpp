@@ -57,6 +57,8 @@ inline void Queue<T>::Node::Previous(Node * val)
 template<typename T>
 inline bool Queue<T>::Node::operator<(const Node & second)
 {
+    if (!this) return false;
+
     auto current = this;
     if (current == &second)
     {
@@ -74,6 +76,8 @@ inline bool Queue<T>::Node::operator<(const Node & second)
 template<typename T>
 inline bool Queue<T>::Node::operator>(const Node & second)
 {
+    if (!this) return false;
+
     auto current = this;
     if (current == &second)
     {
@@ -91,6 +95,8 @@ inline bool Queue<T>::Node::operator>(const Node & second)
 template<typename T>
 inline bool Queue<T>::Node::operator<=(const Node & second)
 {
+    if (!this) return false;
+
     auto current = this;
     while (current != &second)
     {
@@ -104,6 +110,8 @@ inline bool Queue<T>::Node::operator<=(const Node & second)
 template<typename T>
 inline bool Queue<T>::Node::operator>=(const Node & second)
 {
+    if (!this) return false;
+
     auto current = this;
     while (current != &second)
     {
@@ -120,19 +128,29 @@ inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end
     auto l = begin->Next();
     auto r = end;
     while (*l <= *r) {
-        while (*l <= *r && l->Data() <= begin->Data()) {
+        while (*l <= *r && *l->Data() <= *begin->Data()) {
             l = l->Next();
+            if (!l) break;
         }
 
-        while (*l <= *r && r->Data() > begin->Data()) {
+        while (*l <= *r && *r->Data() > *begin->Data()) {
             r = r->Previous();
+            if (!r) break;
         }
 
-        if (*l < *r) {
+        if (*l <= *r) {
             swap(l, r);
         }
     }
-    l = l->Previous;
+    if (!l)
+    {
+        l = end;
+    }
+    else
+    {
+        l = l->Previous();
+    }
+
     swap(begin, l);
 
     return l;
@@ -141,14 +159,13 @@ inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end
 template<typename T>
 inline void Queue<T>::_qsort(Node * begin, Node * end)
 {
-    if (*begin >= *end) {
+    if (*begin >= *end || !begin || !end) {
         return;
     }
 
     auto left = begin,
          right = end,
          middle = _partitition(begin, end);
-
 
     _qsort(left, middle->Previous());
     _qsort(middle->Next(), right);
@@ -223,7 +240,7 @@ inline T * Queue<T>::pop()
 template<typename T>
 inline void Queue<T>::qsort()
 {
-    _qs(Head(), Tail());
+    _qsort(Head(), Tail());
 }
 
 template<typename T>

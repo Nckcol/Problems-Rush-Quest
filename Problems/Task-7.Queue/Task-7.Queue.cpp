@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include <ctime>
 #include "Queue.h"
 #include "Queue.cpp"
 
@@ -10,19 +11,18 @@ using namespace std;
 
 int main()
 {
+    srand((int) time(NULL));
     Queue<int> myQueue;
 
-    myQueue.push(new int(1));
-    myQueue.push(new int(2));
-    myQueue.push(new int(3));
-    myQueue.push(new int(4));
-    myQueue.push(new int(5));
-
-    for (int i = 0; i < myQueue.size(); i++)
-        cout << *myQueue.at(i)->Data() << " ";
+    for (int i = 0; i < 20; i++)
+    {
+        int *random = new int(rand() % 10);
+        cout << *random << " ";
+        myQueue.push(random);
+    }
     cout << endl;
 
-    myQueue.swap(myQueue.at(0), myQueue.at(4));
+    myQueue.qsort();
 
     while (int * tmp = myQueue.pop())
     {
