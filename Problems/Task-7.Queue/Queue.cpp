@@ -2,122 +2,280 @@
 #include "Queue.h"
 
 template<typename T>
-Queue<T>::Node::Node()
+inline Queue<T>::Node::Node()
 {
 }
 
 template<typename T>
-Queue<T>::Node::Node(T * data):
-	_data(data)
+inline Queue<T>::Node::Node(T * data):
+    _data(data)
 {
 }
 
 template<typename T>
-Queue<T>::Node::Node(T * data, Node * previous, Node * next):
-	_data(data), _previous(previous), _next(next)
+inline Queue<T>::Node::Node(T * data, Node * previous, Node * next):
+    _data(data), _previous(previous), _next(next)
 {
 }
 
 template<typename T>
-T * Queue<T>::Node::Data() const 
+inline T * Queue<T>::Node::Data() const 
 {
-	return _data;
+    return _data;
 }
 
 template<typename T>
-void Queue<T>::Node::Data(T * val)
+inline void Queue<T>::Node::Data(T * val)
 {
-	_data = val;
+    _data = val;
 }
 
 template<typename T>
-typename Queue<T>::Node * Queue<T>::Node::Next() const
+inline typename Queue<T>::Node * Queue<T>::Node::Next() const
 {
-	return _next;
+    return _next;
 }
 
 template<typename T>
-void Queue<T>::Node::Next(Node * val)
+inline void Queue<T>::Node::Next(Node * val)
 {
-	_next = val;
+    _next = val;
 }
 
 template<typename T>
-typename Queue<T>::Node * Queue<T>::Node::Previous() const
+inline typename Queue<T>::Node * Queue<T>::Node::Previous() const
 {
-	return _previous;
+    return _previous;
 }
 
 template<typename T>
-void Queue<T>::Node::Previous(Node * val)
+inline void Queue<T>::Node::Previous(Node * val)
 {
-	_previous = val;
+    _previous = val;
+}
+
+template<typename T>
+inline bool Queue<T>::Node::operator<(const Node & second)
+{
+    auto current = this;
+    if (current == &second)
+    {
+        return false;
+    }
+    while (current != &second)
+    {
+        current = current->Next();
+        if (!current) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+inline bool Queue<T>::Node::operator>(const Node & second)
+{
+    auto current = this;
+    if (current == &second)
+    {
+        return false;
+    }
+    while (current != &second)
+    {
+        current = current->Previous();
+        if (!current) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+inline bool Queue<T>::Node::operator<=(const Node & second)
+{
+    auto current = this;
+    while (current != &second)
+    {
+        current = current->Next();
+        if (!current) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+inline bool Queue<T>::Node::operator>=(const Node & second)
+{
+    auto current = this;
+    while (current != &second)
+    {
+        current = current->Previous();
+        if (!current) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end)
+{
+    auto l = begin->Next();
+    auto r = end;
+    while (*l <= *r) {
+        while (*l <= *r && l->Data() <= begin->Data()) {
+            l = l->Next();
+        }
+
+        while (*l <= *r && r->Data() > begin->Data()) {
+            r = r->Previous();
+        }
+
+        if (*l < *r) {
+            swap(l, r);
+        }
+    }
+    l = l->Previous;
+    swap(begin, l);
+
+    return l;
+}
+
+template<typename T>
+inline void Queue<T>::_qsort(Node * begin, Node * end)
+{
+    if (*begin >= *end) {
+        return;
+    }
+
+    auto left = begin,
+         right = end,
+         middle = _partitition(begin, end);
+
+
+    _qsort(left, middle->Previous());
+    _qsort(middle->Next(), right);
 }
 
 template <typename T>
-Queue<T>::Queue()
+inline Queue<T>::Queue()
 {
 }
 
 template <typename T>
-Queue<T>::~Queue()
+inline Queue<T>::~Queue()
 {
 }
 
 template<typename T>
-typename Queue<T>::Node * Queue<T>::Head() const
+inline typename Queue<T>::Node * Queue<T>::Head() const
 {
-	return _head;
+    return _head;
 }
 
 template<typename T>
-void Queue<T>::Head(Node * val)
+inline void Queue<T>::Head(Node * val)
 {
-	_head = val;
+    _head = val;
 }
 
 template<typename T>
-typename Queue<T>::Node * Queue<T>::Tail() const
+inline typename Queue<T>::Node * Queue<T>::Tail() const
 {
-	return _tail;
+    return _tail;
 }
 
 template<typename T>
-void Queue<T>::Tail(Node * val)
+inline void Queue<T>::Tail(Node * val)
 {
-	_tail = val;
+    _tail = val;
 }
 
 template<typename T>
-void Queue<T>::push(T * data)
+inline void Queue<T>::push(T * data)
 {
-	if (!Head())
-	{
-		Head(new Node(data, nullptr, nullptr));
-		Tail(Head());
-		return;
-	}
+    if (!Head())
+    {
+        Head(new Node(data, nullptr, nullptr));
+        Tail(Head());
+        return;
+    }
 
-	Tail()->Next(new Node(data, Tail(), nullptr));
-	Tail(Tail()->Next());
+    Tail()->Next(new Node(data, Tail(), nullptr));
+    Tail(Tail()->Next());
 }
 
 template<typename T>
-T * Queue<T>::pop()
+inline T * Queue<T>::pop()
 {
-	if(!Head())
-		return nullptr;
+    if(!Head())
+        return nullptr;
 
-	auto data = Head()->Data();
+    auto data = Head()->Data();
 
-	if (Head() == Tail())
-	{
-		Tail(nullptr);
-	}
-	
-	Head(Head()->Next());
+    if (Head() == Tail())
+    {
+        Tail(nullptr);
+    }
+    
+    Head(Head()->Next());
 
-	return data;
+    return data;
 }
 
+template<typename T>
+inline void Queue<T>::qsort()
+{
+    _qs(Head(), Tail());
+}
 
+template<typename T>
+inline void Queue<T>::swap(Node * a, Node * b)
+{
+    if (a == b) return;
+    
+    T * tmp = b->Data();
+    b->Data(a->Data());
+    a->Data(tmp);
+}
+
+template<typename T>
+inline int Queue<T>::size()
+{
+    if(!Head())
+        return 0;
+
+    int count = 0;
+    auto current = Head();
+    while (current)
+    {
+        current = current->Next();
+        count++;
+    }
+
+    return count;
+}
+
+template<typename T>
+inline typename Queue<T>::Node * Queue<T>::at(unsigned int i)
+{
+    auto current = Head();
+    while(i--)
+    {
+        current = current->Next();
+        if (!current) return nullptr;
+    }
+    return current;
+}
+
+template<typename T>
+inline int Queue<T>::index(Node * node)
+{
+    int count = 0;
+    auto current = Head();
+    while (current != node)
+    {
+        current = current->Next();
+        if (!current) return -1;
+        count++;
+    }
+
+    return count;
+}
