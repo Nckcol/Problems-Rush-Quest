@@ -1,2 +1,2 @@
 # Problems-Rush-Quest
-C++ Problem pe a day quest.
+The "C++ Problem per day" quest
