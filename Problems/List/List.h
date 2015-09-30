@@ -253,6 +253,7 @@ void List<T>::remove(typename List<T>::Node* node)
             if (current->next() == node)
             {
                 current->setNext(node->next());
+                if (node == tail()) setTail(current);
                 break;
             }
             current = current->next();
@@ -261,7 +262,7 @@ void List<T>::remove(typename List<T>::Node* node)
         // return; //deleting node outside the list may provides some errors.. or does not?
     }
 
-    if (node == tail()) setTail(nullptr);
+    
     delete node;
 }
 
