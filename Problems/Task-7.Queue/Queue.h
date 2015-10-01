@@ -46,11 +46,11 @@ public:
     T* pop();
 
     void qsort();
-    void swap(Node * a, Node * b);
+    void isort();
 
+    void swap(Node * a, Node * b);
+    Node * middle(Node * from, Node * to);
     int size();
     Node * at(unsigned int i);
     int index(Node * node);
-    /*void isort();*/
-
 };

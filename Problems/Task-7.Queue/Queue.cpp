@@ -125,22 +125,37 @@ inline bool Queue<T>::Node::operator>=(const Node & second)
 template<typename T>
 inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end)
 {
+    swap(middle(begin, end), begin);
     auto l = begin->Next();
     auto r = end;
-    while (*l <= *r) {
-        while (*l <= *r && *l->Data() <= *begin->Data()) {
+    bool equals = false;
+    bool out = false;
+    while (!out) {
+        while (*l->Data() <= *begin->Data()) {
             l = l->Next();
+            if (l == r) equals = true;
+            if (equals)
+            {
+                out = true;
+            }
             if (!l) break;
         }
 
-        while (*l <= *r && *r->Data() > *begin->Data()) {
+        if (out) break;
+
+        while (*r->Data() > *begin->Data()) {
             r = r->Previous();
+            if (l == r) equals = true;
+            if (equals)
+            {
+                out = true;
+            }
             if (!r) break;
         }
 
-        if (*l <= *r) {
-            swap(l, r);
-        }
+        if (out) break;
+
+        swap(l, r);
     }
     if (!l)
     {
@@ -244,6 +259,27 @@ inline void Queue<T>::qsort()
 }
 
 template<typename T>
+inline void Queue<T>::isort()
+{
+    if (!Head()) return;
+
+    auto pointer = Head()->Next();
+
+    while (pointer)
+    {
+        auto currentElement = pointer;
+        pointer = pointer->Next();
+
+        while (*currentElement->Data() < *currentElement->Previous()->Data())
+        {
+            swap(currentElement, currentElement->Previous());
+            currentElement = currentElement->Previous();
+            if (!currentElement->Previous()) break;
+        }
+    }
+}
+
+template<typename T>
 inline void Queue<T>::swap(Node * a, Node * b)
 {
     if (a == b) return;
@@ -251,6 +287,18 @@ inline void Queue<T>::swap(Node * a, Node * b)
     T * tmp = b->Data();
     b->Data(a->Data());
     a->Data(tmp);
+}
+
+template<typename T>
+inline typename Queue<T>::Node * Queue<T>::middle(typename Queue<T>::Node * from, typename Queue<T>::Node * to)
+{
+    while (from < to)
+    {
+        from = from->Next();
+        to = to->Previous();
+    }
+
+    return from;
 }
 
 template<typename T>
