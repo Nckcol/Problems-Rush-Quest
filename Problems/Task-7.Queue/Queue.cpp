@@ -128,34 +128,20 @@ inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end
     swap(middle(begin, end), begin);
     auto l = begin->Next();
     auto r = end;
-    bool equals = false;
-    bool out = false;
-    while (!out) {
-        while (*l->Data() <= *begin->Data()) {
+    while (*l <= *r) {
+        while (*l <= *r && *l->Data() <= *begin->Data()) {
             l = l->Next();
-            if (l == r) equals = true;
-            if (equals)
-            {
-                out = true;
-            }
             if (!l) break;
         }
 
-        if (out) break;
-
-        while (*r->Data() > *begin->Data()) {
+        while (*l <= *r && *r->Data() > *begin->Data()) {
             r = r->Previous();
-            if (l == r) equals = true;
-            if (equals)
-            {
-                out = true;
-            }
             if (!r) break;
         }
 
-        if (out) break;
-
-        swap(l, r);
+        if (*l <= *r) {
+            swap(l, r);
+        }
     }
     if (!l)
     {

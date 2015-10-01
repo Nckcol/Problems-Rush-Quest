@@ -23,6 +23,7 @@ int main()
     }
 
     myQueue.qsort();
+    cout << endl;
 
     while (int * tmp = myQueue.pop())
     {
