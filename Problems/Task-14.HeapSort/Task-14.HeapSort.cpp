@@ -7,18 +7,19 @@
 
 using namespace std;
 
-void swap(int &n1, int &n2);
+void swap(int & a, int & b);
+int & min(int & a, int & b);
 void heapSort(int* a, int n);
 
 int main()
 {
-    int const n = 20;
+    int const n = 10;
     int *a = new int[n];
 
     srand(time(NULL));
     for (int i = 0; i < n; ++i)
     {
-        a[i] = rand()%100;
+        a[i] = rand()%10;
         cout << a[i] << " ";
     }
     cout << endl;
@@ -35,11 +36,18 @@ int main()
     return 0;
 }
 
-void swap(int &n1, int &n2)
+void swap(int & a, int & b)
 {
-    int temp = n1;
-    n1 = n2;
-    n2 = temp;
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int & min(int & a, int & b)
+{
+    if (b < a)
+        return b;
+    return a;
 }
 
 void heapSort(int* a, int n)
@@ -61,23 +69,17 @@ void heapSort(int* a, int n)
                 if ((a[parent] > a[firstChild]) ||
                     (a[parent] > a[secondChild]))
                 {
-                    if (a[firstChild] < a[secondChild])
-                    {
-                        swap(a[parent], a[firstChild]);
-                        repeat = true;
-                    }
-                    else if (a[secondChild] < a[firstChild])
-                    {
-                        swap(a[parent], a[secondChild]);
-                        repeat = true;
-                    }
+                    swap(a[parent], min(a[firstChild], a[secondChild]));
+                    repeat = true;
                 }
+                
                 
                 if (a[secondChild] < a[firstChild])
                 {
                     swap(a[firstChild], a[secondChild]);
                     repeat = true;
                 }
+                
             }
             else if (firstChild < n)
             {
