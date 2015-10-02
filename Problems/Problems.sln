@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ListTest", "ListTest\ListTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task-13.MaxSum", "Task-13.MaxSum\Task-13.MaxSum.vcxproj", "{A5DBC4E0-BFFD-44A2-A908-9F897396605F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task-25.Palindrome", "Task-25.Palindrome\Task-25.Palindrome.vcxproj", "{3840F92C-B199-46E3-AF56-F63497AB069D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{A5DBC4E0-BFFD-44A2-A908-9F897396605F}.Release|x64.Build.0 = Release|x64
 		{A5DBC4E0-BFFD-44A2-A908-9F897396605F}.Release|x86.ActiveCfg = Release|Win32
 		{A5DBC4E0-BFFD-44A2-A908-9F897396605F}.Release|x86.Build.0 = Release|Win32
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Debug|x64.ActiveCfg = Debug|x64
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Debug|x64.Build.0 = Debug|x64
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Debug|x86.ActiveCfg = Debug|Win32
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Debug|x86.Build.0 = Debug|Win32
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Release|x64.ActiveCfg = Release|x64
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Release|x64.Build.0 = Release|x64
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Release|x86.ActiveCfg = Release|Win32
+		{3840F92C-B199-46E3-AF56-F63497AB069D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
