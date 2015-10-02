@@ -128,18 +128,21 @@ inline typename Queue<T>::Node * Queue<T>::_partitition(Node * begin, Node * end
     swap(middle(begin, end), begin);
     auto l = begin->Next();
     auto r = end;
-    while (*l <= *r) {
-        while (*l <= *r && *l->Data() <= *begin->Data()) {
+    bool out = (l == r);
+    while (!out) {
+        while (!out && *l->Data() <= *begin->Data()) {
+            out = (l == r) || out;
             l = l->Next();
             if (!l) break;
         }
 
-        while (*l <= *r && *r->Data() > *begin->Data()) {
+        while (!out && *r->Data() > *begin->Data()) {
+            out = (l == r) || out;
             r = r->Previous();
             if (!r) break;
         }
 
-        if (*l <= *r) {
+        if (!out) {
             swap(l, r);
         }
     }
@@ -239,6 +242,74 @@ inline T * Queue<T>::pop()
 }
 
 template<typename T>
+void Queue<T>::insertAfter(typename Queue<T>::Node * after, typename Queue<T>::Node * node)
+{
+    if (!after && !node) return;
+
+    if (node->Before() && node->Next())
+    {
+        node->Before()->Next(node->Next());
+        node->Next()->Before(node->Before());
+    }
+    else if (node->Next())
+    {
+        node->Next()->Before(nullptr);
+        Head(node->Next());
+    }
+    else
+    {
+        node->Before()->Next(nullptr);
+        Tail(node->Before());
+    }
+
+    node->Previous(after);
+    node->Next(after->Next());
+    after->Next(node);
+    if (!node->Next())
+    {
+        Tail(node);
+    }
+    else
+    {
+        node->Next()->Previous(node);
+    }
+}
+
+template<typename T>
+void Queue<T>::inserBefore(typename Queue<T>::Node * before, typename Queue<T>::Node * node)
+{
+    if (!before && !node) return;
+
+    if (node->Before() && node->Next())
+    {
+        node->Before()->Next(node->Next());
+        node->Next()->Before(node->Before());
+    }
+    else if (node->Next())
+    {
+        node->Next()->Before(nullptr);
+        Head(node->Next());
+    }
+    else
+    {
+        node->Before()->Next(nullptr);
+        Tail(node->Before());
+    }
+
+    node->Previous(before->Previous());
+    node->Next(before);
+    before->Previous(node);
+    if (!node->Previous())
+    {
+        Head(node);
+    }
+    else
+    {
+        node->Previous()->Next(node);
+    }
+}
+
+template<typename T>
 inline void Queue<T>::qsort()
 {
     _qsort(Head(), Tail());
@@ -278,7 +349,7 @@ inline void Queue<T>::swap(Node * a, Node * b)
 template<typename T>
 inline typename Queue<T>::Node * Queue<T>::middle(typename Queue<T>::Node * from, typename Queue<T>::Node * to)
 {
-    while (from < to)
+    while (from != to && from != to->Previous())
     {
         from = from->Next();
         to = to->Previous();

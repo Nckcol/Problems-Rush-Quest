@@ -21,9 +21,9 @@ int main()
         cout << *random << " ";
         myQueue.push(random);
     }
-
-    myQueue.qsort();
     cout << endl;
+    myQueue.qsort();
+    
 
     while (int * tmp = myQueue.pop())
     {
@@ -31,7 +31,7 @@ int main()
     }
     cout << endl;
 
-    cout << "Calculate timing of insert sort..." << endl;
+    cout << "Calculate timing of insert sort..." << endl << endl;
 
     clock_t insertSortTiming = clock();
 
@@ -41,24 +41,28 @@ int main()
 
         for (int i = 0; i < 100; i++)
         {
-            myQueue->push(new int(rand() % 1000));
+            myQueue->push(new int(rand() % 100));
         }
 
         myQueue->isort();
 
         delete myQueue;
     }
+
     insertSortTiming = clock() - insertSortTiming;
-    cout << "Result: " <<  (float) insertSortTiming / CLOCKS_PER_SEC << endl;
-    cout << "Calculate timing of quick sort..." << endl;
+    cout << "Result of 10000 iterations: " <<  (float) insertSortTiming / CLOCKS_PER_SEC << endl;
+    cout << "Average time for iteration: " << (float)insertSortTiming / CLOCKS_PER_SEC / 10000 << endl << endl;
+
+    cout << "Calculate timing of quick sort..." << endl << endl;
     clock_t quickSortTiming = clock();
+
     for (int i = 0; i < 10000; i++)
     {
         Queue<int> *myQueue = new Queue<int>();
 
         for (int i = 0; i < 100; i++)
         {
-            myQueue->push(new int(rand() % 1000));
+            myQueue->push(new int(rand() % 100));
         }
 
         myQueue->qsort();
@@ -67,7 +71,8 @@ int main()
     }
 
     quickSortTiming = clock() - quickSortTiming;
-    cout << "Result: " << (float) quickSortTiming / CLOCKS_PER_SEC << endl;
+    cout << "Result of 10000 iterations: " << (float) quickSortTiming / CLOCKS_PER_SEC << endl;
+    cout << "Average time for iteration: " << (float)quickSortTiming / CLOCKS_PER_SEC / 10000 << endl << endl;
 
     return 0;
 }

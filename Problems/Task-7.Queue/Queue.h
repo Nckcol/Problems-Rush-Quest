@@ -44,6 +44,8 @@ public:
 
     void push(T* data);
     T* pop();
+    void insertAfter(Node * after, Node * node);
+    void inserBefore(Node * before, Node * node);
 
     void qsort();
     void isort();
