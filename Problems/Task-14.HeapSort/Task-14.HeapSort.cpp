@@ -7,13 +7,18 @@
 
 using namespace std;
 
+
+void rHeapSort(int * begin, int * end);
+int * _leftChild(int * begin, int * parent);
+int * _rightChild(int * begin, int * parent);
+void _shiftDown(int * begin, int * end);
 void swap(int & a, int & b);
 int & min(int & a, int & b);
 void heapSort(int* a, int n);
 
 int main()
 {
-    int const n = 10;
+    int const n = 20;
     int *a = new int[n];
 
     srand(time(NULL));
@@ -24,7 +29,14 @@ int main()
     }
     cout << endl;
 
-    heapSort(a, n);
+    //heapSort(a, n);
+
+    for (int i = 0; i < n; i++)
+    {
+        cout << a[i] << " ";
+    }
+    cout << endl;
+    rHeapSort(a, a + n);
 
     for (int i = 0; i < n; i++)
     {
@@ -50,7 +62,66 @@ int & min(int & a, int & b)
     return a;
 }
 
-void heapSort(int* a, int n)
+int & max(int & a, int & b)
+{
+    if (b > a)
+        return b;
+    return a;
+}
+
+void rHeapSort(int * begin, int * end)
+{
+    for (int * i = begin + distance(begin, end) / 2; i >= begin; i--)
+        _shiftDown(i, end);
+
+    for (int * i = end - 1; i > begin; i--)
+    {
+        swap(*begin, *i);
+        _shiftDown(begin, i);
+    }
+}
+
+int * _leftChild(int * begin, int * parent)
+{
+    return begin + 2 * distance(begin, parent) + 1;
+}
+
+int * _rightChild(int * begin, int * parent)
+{
+    return begin + 2 * distance(begin, parent) + 2;
+}
+
+void _shiftDown(int * begin, int * end)
+{
+    int *current = begin;
+    int * maxChild = _leftChild(begin, current);
+    
+    while (maxChild < end)
+    {
+        
+        if (_rightChild(begin, current) < end)
+        {
+            if (*_leftChild(begin, current) < *_rightChild(begin, current))
+            {
+                maxChild = _rightChild(begin, current);
+            }
+        }
+
+        if (*current < *maxChild)
+        {
+            swap(*current, *maxChild);
+        }
+        else
+        {
+            break;
+        }
+
+        current = maxChild;
+        maxChild = _leftChild(begin, current);
+    }
+}
+
+void heapSort(int * a, int n)
 {
     int offset = 0;
     bool repeat = false;
